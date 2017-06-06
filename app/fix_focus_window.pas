@@ -14,9 +14,15 @@ interface
 uses
   {$ifdef windows}
   Windows,
+  simpleipc,
   {$endif}
   SysUtils,
   LCLIntf;
+
+// Create SimpleIPC Server&Client to communicate with .lpr
+var
+  IPCClient : TSimpleIPCClient;
+  IPCServer : TSimpleIPCServer;
 
 //WinAPI SetForegroundWindow function dont help on Win10
 procedure DoFocusWindow(h: THandle);
@@ -36,10 +42,10 @@ begin
   if Assigned(SwitchFunc) then
   begin
     //2 ShowWindow calls are patch from https://github.com/Alexey-T/CudaText/issues/595
-    ShowWindow(h, SW_HIDE);
-    ShowWindow(h, SW_SHOW);
+    //ShowWindow(h, SW_HIDE);
+    //ShowWindow(h, SW_SHOW);
     
-    SwitchFunc(h, false);
+    //SwitchFunc(h, false); //Not needed anymore
   end
   else
     LCLIntf.SetForegroundWindow(h);

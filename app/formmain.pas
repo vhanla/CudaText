@@ -85,7 +85,8 @@ uses
   formabout,
   formcharmaps,
   formkeyinput, form_addon_report,
-  math;
+  math,
+  simpleipc;
 
 type
   TATFindMarkingMode = (
@@ -841,6 +842,7 @@ type
     procedure UpdateAppForSearch(AStart: boolean; AEdLock: boolean);
     procedure UpdateStatus;
     procedure InitStatusButton;
+    procedure IPCMessage(Sender: TObject);
   public
     { public declarations }
     Tree: TTreeView;
@@ -1031,6 +1033,13 @@ begin
 
   {$ifdef windows}
   UiOps.ScreenScale:= MulDiv(100, Screen.PixelsPerInch, 96);
+
+  //create another IPC server to send window handle so it will switch to this instance
+  IPCServer := TSimpleIPCServer.Create(Self);
+  IPCServer.ServerID:='cudatext.2';
+  IPCServer.Global:=True;
+  IPCServer.OnMessage:=@IPCMessage;
+  IPCServer.StartServer;
   {$endif}
   //UiOps.ScreenScale:= 200; ////test
   UiOps_ScreenScale:= UiOps.ScreenScale;
@@ -1214,6 +1223,9 @@ procedure TfmMain.FormDestroy(Sender: TObject);
 var
   i: integer;
 begin
+  {$ifdef windows}
+  IPCServer.Free;
+  {$ifend}
   for i:= 0 to FListTimers.Count-1 do
     TTimer(FListTimers.Objects[i]).Enabled:= false;
   FreeAndNil(FListTimers);

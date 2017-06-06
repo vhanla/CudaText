@@ -153,6 +153,22 @@ begin
   ButtonCancel.Hide;
 end;
 
+procedure TfmMain.IPCMessage(Sender: TObject);
+begin
+  if IPCServer.StringMessage = 'NOCUDAWND' then
+  begin
+    IPCClient := TSimpleIPCClient.Create(nil);
+    IPCClient.ServerId := 'cudatext.1';
+    if IPCClient.ServerRunning then
+    begin
+      IPCClient.Active := True;
+      IPCClient.SendStringMessage(IntToStr(Self.Handle));
+    end;
+
+    IPCClient.Free;
+  end;
+end;
+
 procedure TfmMain.UpdateFrame(AUpdatedText: boolean = false);
 var
   F: TEditorFrame;
