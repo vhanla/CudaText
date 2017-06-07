@@ -20,9 +20,11 @@ uses
   LCLIntf;
 
 // Create SimpleIPC Server&Client to communicate with .lpr
+{$ifdef windows}
 var
   IPCClient : TSimpleIPCClient;
   IPCServer : TSimpleIPCServer;
+{$ifend}
 
 //WinAPI SetForegroundWindow function dont help on Win10
 procedure DoFocusWindow(h: THandle);

@@ -155,6 +155,7 @@ end;
 
 procedure TfmMain.IPCMessage(Sender: TObject);
 begin
+  {$ifdef windows}
   if IPCServer.StringMessage = 'NOCUDAWND' then
   begin
     IPCClient := TSimpleIPCClient.Create(nil);
@@ -167,6 +168,7 @@ begin
 
     IPCClient.Free;
   end;
+  {$ifend}
 end;
 
 procedure TfmMain.UpdateFrame(AUpdatedText: boolean = false);
