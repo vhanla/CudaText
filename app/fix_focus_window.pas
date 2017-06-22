@@ -211,7 +211,6 @@ end;
 
 procedure TUniqueWinInstance.StartListening;
 begin
-  _Server := TSimpleIPCServer.Create(Self);
   _Server.ServerID:=_ServerId;
   _Server.Global:=True;
   _Server.OnMessage:=@ReceivedMessage;
