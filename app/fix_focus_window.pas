@@ -166,10 +166,12 @@ end;
 constructor TUniqueWinInstance.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  _Server := TSimpleIPCServer.Create(Self);
 end;
 
 destructor TUniqueWinInstance.Destroy;
 begin
+  _Server.Free;
   inherited Destroy;
 end;
 
@@ -180,7 +182,6 @@ begin
   Result := False;
 
   // start our server to listen commands from existing cudatext's window handle
-  _Server := TSimpleIPCServer.Create(Self);
   _Server.ServerID:=_ServerId;
   _Server.Global:=True;
   _Server.OnMessage:=@ReceivedMessage;
@@ -205,7 +206,6 @@ begin
   end;
 
   client.Free;
-  _Server.Free;
 
 end;
 
